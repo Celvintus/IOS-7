@@ -1,0 +1,94 @@
+enum CarAction {
+    case startEngine
+    case stopEngine
+    case openWindows
+    case closeWindows
+    case loadCargo(volume: Double)
+    case unloadCargo(volume: Double)
+}
+
+struct Car: Hashable {
+    var brand: String
+    var year: Int
+    var trunk: Double
+    var Engine: Bool
+    var Windows: Bool
+    var filledTrunk: Double
+
+    mutating func Action(_ action: CarAction) {
+        switch action {
+        case .startEngine:
+            Engine = true
+        case .stopEngine:
+            Engine = false
+        case .openWindows:
+            Windows = true
+        case .closeWindows:
+            Windows = false
+        case .loadCargo(let volume):
+            filledTrunk += volume
+        case .unloadCargo(let volume):
+            filledTrunk -= volume
+            if filledTrunk < 0 {
+                filledTrunk = 0
+            }
+        }
+    }
+}
+
+struct Truck: Hashable {
+    var brand: String
+    var year: Int
+    var cargo: Double
+    var Engine: Bool
+    var Windows: Bool
+    var filledCargo: Double
+
+   mutating func Action(_ action: CarAction) {
+        switch action {
+        case .startEngine:
+            Engine = true
+        case .stopEngine:
+            Engine = false
+        case .openWindows:
+            Windows = true
+        case .closeWindows:
+            Windows = false
+        case .loadCargo(let volume):
+            filledCargo += volume
+        case .unloadCargo(let volume):
+            filledCargo -= volume
+            if filledCargo < 0 {
+                filledCargo = 0
+            }
+        }
+    }
+}
+
+
+var car1 = Car(brand: "Toyota", year: 2022, trunk: 500.0, Engine: false, Windows: false, filledTrunk: 100.0)
+
+var car2 = Car(brand: "Honda", year: 2021, trunk: 450.0, Engine: true, Windows: true, filledTrunk: 200.0)
+
+var truck1 = Truck(brand: "Volvo", year: 2020, cargo: 2000.0, Engine: true, Windows: true, filledCargo: 1500.0)
+
+var truck2 = Truck(brand: "Mercedes", year: 2023, cargo: 2500.0, Engine: false, Windows: false, filledCargo: 500.0)
+
+car1.Action(.startEngine)
+car1.Action(.openWindows)
+
+car2.Action(.loadCargo(volume: 50.0))
+car2.Action(.unloadCargo(volume: 100.0))
+
+truck1.Action(.startEngine)
+truck1.Action(.loadCargo(volume: 1000.0))
+
+truck2.Action(.closeWindows)
+truck2.Action(.unloadCargo(volume: 200.0))
+
+var carDictionary: [Car: String] = [car1: "car1", car2: "car2"]
+var truckDictionary: [Truck: String] = [truck1: "truck1", truck2: "truck2"]
+
+print("Словарь для легковых автомобилей: \(carDictionary)")
+print("Словарь для грузовиков: \(truckDictionary)")
+
