@@ -1,0 +1,55 @@
+class Man {
+    private var _passport: Passport?
+
+    var passport: Passport? {
+        return _passport
+    }
+
+    func assignPassport(_ passport: Passport) {
+    _passport = passport
+    _passport?.onOwnerChange = {
+        self._passport = nil
+    }
+}
+
+
+    deinit {
+        print("Мужчина удален из памяти")
+    }
+}
+
+class Passport {
+    private var _owner: Man?
+
+    var onOwnerChange: (() -> Void)?
+
+    var owner: Man? {
+        return _owner
+    }
+
+    init(owner: Man) {
+        _owner = owner
+    }
+
+    func changeOwner(_ newOwner: Man) {
+        _owner = newOwner
+        onOwnerChange?()
+    }
+
+    deinit {
+        print("Паспорт удален из памяти")
+    }
+}
+
+var man: Man? = Man()
+var passport: Passport? = Passport(owner: man!)
+
+// Возможность существования без паспорта
+man?.assignPassport(passport!)
+
+// Возможность изменения или отказа от паспорта
+let newMan = Man()
+passport?.changeOwner(newMan)
+
+man = nil 
+passport = nil
